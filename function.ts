@@ -30,8 +30,30 @@ interface User1{
 
 const Sam: User1 = {name: 'Sam'}
 
-function showName() {
+function showName(this:User1) {
     console.log(this.name);
 }
 
-const a = showName.bind(Sam)
+const a = showName.bind(Sam);
+a();
+
+// 함수 overload : 전달받은 매개변수의 갯수나 타입에 따라 다른동작을 하게하는 것
+interface User2 {
+    name: string;
+    age: number;
+}
+function join(name: string, age: string):string;
+function join(name: string, age: number):User2;
+function join(name: string, age:number|string):User2 | string {
+    if (typeof age ==="number") {
+        return {
+            name,
+            age,
+        };
+    } else {
+        return "나이는 숫자로 입력해주세요."
+    }
+}
+
+const sam: User2 = join("Sam", 30);
+const jane: string = join("Jane", "30");
